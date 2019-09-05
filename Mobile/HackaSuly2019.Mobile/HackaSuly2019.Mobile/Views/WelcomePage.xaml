@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="HackaSuly2019.Mobile.Views.WelcomePage">
+
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <StackLayout>
+                <Button x:Name="cameraButton" Text="Camera" Clicked="CameraButton_Clicked" />
+                <Button x:Name="galleryButton" Text="Gallery" Clicked="GalleryButton_Clicked" />
+            </StackLayout>
+            
+            <Image x:Name="selectedImage" Grid.Row="1"/>
+        </Grid>
+        
+    </ContentPage.Content>
+</ContentPage>
