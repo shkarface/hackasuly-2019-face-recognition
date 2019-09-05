@@ -25,7 +25,22 @@ namespace hackasuly2019_face_recognition
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services
+                .Configure<DatabaseSettings>(Configuration.GetSection(nameof(DatabaseSettings)))
+                    .AddSingleton<IDatabaseSettings>(sp => sp.GetRequiredService<IOptions<DatabaseSettings>>().Value)
+                    .AddSingleton<Services.FoundPersonService>()
+                    .AddSingleton<Services.LostPersonService>()
+
+                .AddCors(options =>
+                {
+                    options.AddPolicy("_cors",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                    });
+                })
+                .AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

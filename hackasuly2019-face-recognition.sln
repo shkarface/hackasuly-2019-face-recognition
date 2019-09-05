@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hackasuly2019-face-recognition", "hackasuly2019-face-recognition\hackasuly2019-face-recognition.csproj", "{AF898C74-EA6B-4683-82CA-860FAAF2B736}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MissingPeople.Backend", "hackasuly2019-face-recognition\MissingPeople.Backend.csproj", "{AF898C74-EA6B-4683-82CA-860FAAF2B736}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MissingPeople.Models", "MissingPeople.Models\MissingPeople.Models.csproj", "{47254912-D78E-4F66-881B-8E6251B9C63C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{AF898C74-EA6B-4683-82CA-860FAAF2B736}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF898C74-EA6B-4683-82CA-860FAAF2B736}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF898C74-EA6B-4683-82CA-860FAAF2B736}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47254912-D78E-4F66-881B-8E6251B9C63C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47254912-D78E-4F66-881B-8E6251B9C63C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47254912-D78E-4F66-881B-8E6251B9C63C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47254912-D78E-4F66-881B-8E6251B9C63C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
