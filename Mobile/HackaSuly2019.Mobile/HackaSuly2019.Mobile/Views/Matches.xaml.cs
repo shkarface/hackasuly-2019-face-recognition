@@ -16,7 +16,7 @@ namespace HackaSuly2019.Mobile.Views
         public Matches(IEnumerable<MatchViewModel> matches)
         {
             InitializeComponent();
-            matchesCollection.ItemsSource = matches;
+            matchesCollection.ItemsSource = matches.OrderByDescending(m => m.Confidence);
             errorMessage.IsVisible = false;
         }
 
