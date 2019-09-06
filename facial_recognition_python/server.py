@@ -1,8 +1,7 @@
 from face_recognizer import detect_faces_in_image, backup_face_encodings, restore_face_encodings
 from flask import Flask, jsonify, request, redirect
 from signal import SIGABRT, SIGILL, SIGINT, SIGSEGV, SIGTERM, signal
-import sys
-
+import sys, io, urllib
 
 # Port
 
@@ -43,23 +42,25 @@ def allowed_file(filename):
 def upload_image():
     # Check if a valid image file was uploaded
     if request.method == 'POST':
-        if 'file' not in request.files:
-            return redirect(request.url)
-
-        file = request.files['file']
-        unique_string = request.form['string']
+        file_url = request.form['image']
+        unique_string = request.form['id']
         gender = request.form['gender']
         force_save = request.form['force']
+
+        file = urllib.request.urlopen(file_url).read()
+        file = io.BytesIO(file)
+
+        if gender == 0 or gender[0] == '0':
+            gender = 'male'
+        elif gender == 1 or gender[0] == '1':
+            gender = 'female'
 
         if force_save == 0 or force_save[0] == '0':
             force_save = False
         elif force_save == 1 or force_save[0] == '1':
             force_save = True
-        
-        if file.filename == '':
-            return redirect(request.url)
 
-        if file and allowed_file(file.filename) and unique_string is not None and gender is not None:
+        if file and unique_string is not None and gender is not None:
             # The image file seems valid! Detect faces and return the result.
             return jsonify(detect_faces_in_image(file, unique_string, gender, force_save))
 
@@ -70,11 +71,11 @@ def upload_image():
     <title>Recognize Faces?</title>
     <h1>Upload a picture and see if it get recognized!</h1>
     <form method="POST" enctype="multipart/form-data">
-      <label>File</label><input type="file" name="file"></br>
-      <label>String</label><input type="text" name="string"></br>
+      <label>File</label><input type="text" name="image"></br>
+      <label>String</label><input type="text" name="id"></br>
       <p>Please select your gender:</p> </br>
-        <input type="radio" name="gender" value="male"> Male<br>
-        <input type="radio" name="gender" value="female"> Female<br>
+        <input type="radio" name="gender" value="0"> Male<br>
+        <input type="radio" name="gender" value="1"> Female<br>
         <p>Force Save?:</p> </br>
          <input type="radio" name="force" value=1> Yes <br>
         <input type="radio" name="force" value=0> No <br>      
