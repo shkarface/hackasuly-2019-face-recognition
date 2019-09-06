@@ -1,6 +1,7 @@
 import face_recognition
+import backup_restore
 
-dic = {
+face_encodings_dictonary = {
     "male": {
         "saved_unique_identification": [],
         "saved_face_encodings": [],
@@ -11,12 +12,21 @@ dic = {
     }
 }
 
+# where face encodings get saved or loaded from if exists
+folder_path = './temp/'
+file_name = 'faces_encodings.npy'
+
+def backup_face_encodings():
+    backup_restore.backup(folder_path, file_name, face_encodings_dictonary)
+
+def restore_face_encodings():
+    backup_restore.restore(folder_path, file_name, face_encodings_dictonary)
 
 # call detects faces method with respective data of female set or males set
 def detect_faces_in_image(file_stream, uniqueString, gender):
-    if gender in dic:
-        saved_unique_identification = dic[gender]["saved_unique_identification"]
-        saved_face_encodings = dic[gender]["saved_face_encodings"]
+    if gender in face_encodings_dictonary:
+        saved_unique_identification = face_encodings_dictonary[gender]["saved_unique_identification"]
+        saved_face_encodings = face_encodings_dictonary[gender]["saved_face_encodings"]
         return detect_faces(file_stream, uniqueString,saved_unique_identification, saved_face_encodings)
     else: return {
         "result": None,

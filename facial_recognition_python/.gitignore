@@ -6,3 +6,6 @@ test.py
 
 # Vscode folder
 .vscode
+
+# temp folder
+/temp

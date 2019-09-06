@@ -1,10 +1,32 @@
-from face_recognizer import detect_faces_in_image
+from face_recognizer import detect_faces_in_image, backup_face_encodings, restore_face_encodings
 from flask import Flask, jsonify, request, redirect
+from signal import SIGABRT, SIGILL, SIGINT, SIGSEGV, SIGTERM, signal
+import sys
+
 
 # Port
 
 port = 5000
 host = "localhost"
+
+custom_port = input("Server port? Default is 5000\n")
+custom_host = input("Server host? Default is localhost\n")
+user_choice_to_restore = input("""Do you want to restore old data?
+Y for Yes or anything else for No
+Back must exist in the following directory relative to this server
+./temp/faces_encodings.npy
+Warning if You do not restore, auto backup will replace old one\n""")
+
+if (custom_port is not None and custom_port != ''):
+    port = int(custom_port)
+
+if (custom_host is not None and custom_host != ''):
+    host = custom_host
+
+if (user_choice_to_restore is not None and user_choice_to_restore != ''):
+    first_letter = user_choice_to_restore[0]
+    if (first_letter == 'Y' or first_letter == 'y'):
+        restore_face_encodings()
 
 # You can change this to any folder on your system
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -49,8 +71,15 @@ def upload_image():
     </form>
     '''
 
+# Runs before the server exits
+# Excluding SIGBREAK signal
+def run_before_exit(*args):
+    backup_face_encodings()
+    sys.exit(0)
 
+for sigcode in (SIGABRT, SIGILL, SIGINT, SIGSEGV, SIGTERM):
+    signal(sigcode, run_before_exit)
 
 
 if __name__ == "__main__":
-    app.run(host, port, debug=True)
+    app.run(host, port, debug=True, use_reloader=False)
