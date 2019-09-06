@@ -6,8 +6,8 @@
        mc:Ignorable="d"
        xmlns:local="clr-namespace:HackaSuly2019.Mobile.Views"
        Title="HackaSuly2019.Mobile"
-       x:Class="HackaSuly2019.Mobile.AppShell">
-
+       x:Class="HackaSuly2019.Mobile.AppShell"
+       Visual="Material">
     <!-- 
         Styles and Resources 
     -->
@@ -33,9 +33,6 @@
     <TabBar>
         <Tab Title="Browse" Icon="tab_feed.png">
             <ShellContent ContentTemplate="{DataTemplate local:WelcomePage}" />
-        </Tab>
-        <Tab Title="About" Icon="tab_about.png">
-            <ShellContent ContentTemplate="{DataTemplate local:AboutPage}" />
         </Tab>
     </TabBar>
 

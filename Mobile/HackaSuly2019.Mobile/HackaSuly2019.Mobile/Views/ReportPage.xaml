@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
+             mc:Ignorable="d" Visual="Material"
+             xmlns:circular="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+             x:Class="HackaSuly2019.Mobile.Views.ReportPage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label" x:Key="LabelStyle">
+                <Setter Property="Margin" Value="5, 0" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+        <StackLayout Padding="5">
+            <circular:CircleImage x:Name="profilePicture" Source="user.png" WidthRequest="125" HeightRequest="125" />
+            <Button x:Name="selectImageButton" Text="Select Image" Clicked="SelectImageButton_Clicked" />
+
+            <Entry x:Name="nameEntry" Placeholder="Your name" Visual="Material" />
+
+            <Entry x:Name="phoneEntry" Placeholder="Your phone number" Visual="Material" />
+
+            <Label Text="The missing person's sex: " Style="{StaticResource LabelStyle}" />
+            <input:RadioButtonGroupView Orientation="Horizontal" >
+                <input:RadioButton Text="Male" x:Name="maleRadioButton" HorizontalOptions="CenterAndExpand" />
+                <input:RadioButton Text="Female" x:Name="femaleRadioButton" HorizontalOptions="CenterAndExpand" />
+            </input:RadioButtonGroupView>
+
+            <Button x:Name="reportButton" Text="Report" VerticalOptions="EndAndExpand" Margin="10, 0, 10, 10" Clicked="ReportButton_Clicked" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

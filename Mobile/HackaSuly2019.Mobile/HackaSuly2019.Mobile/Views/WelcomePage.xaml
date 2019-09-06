@@ -6,25 +6,48 @@
              mc:Ignorable="d"
              x:Class="HackaSuly2019.Mobile.Views.WelcomePage">
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label" x:Key="EmojiStyle">
+                <Setter Property="FontSize" Value="128" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                <Setter Property="Opacity" Value="1" />
+                <Setter Property="FontAttributes" Value="Bold" />
+            </Style>
+
+            <Style TargetType="Label" x:Key="DetailStyle">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="TextColor" Value="White" />
+            </Style>
+
+            <Style TargetType="Frame" x:Key="FrameStyle">
+                <Setter Property="VerticalOptions" Value="FillAndExpand" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <StackLayout x:Name="buttonsStackLayout">
-                <Button x:Name="cameraButton" Text="Camera" Clicked="CameraButton_Clicked" />
-                <Button x:Name="galleryButton" Text="Gallery" Clicked="GalleryButton_Clicked" />
-            </StackLayout>
-            
-            <Image x:Name="selectedImage" Grid.Row="1"/>
-
-            <Grid Grid.RowSpan="2" x:Name="progressGrid" IsVisible="False">
-                <ActivityIndicator WidthRequest="256" HeightRequest="256" HorizontalOptions="Center"
-                                   VerticalOptions="Center" IsRunning="True" />
-            </Grid>
-        </Grid>
-        
+        <StackLayout Padding="10">
+            <Frame BackgroundColor="Green" Style="{StaticResource FrameStyle}">
+                <StackLayout>
+                    <Label Text="😄" Style="{StaticResource EmojiStyle}" />
+                    <Label Text="Found someone" Style="{StaticResource DetailStyle}" />
+                </StackLayout>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="FoundFrame_Tapped" />
+                </Frame.GestureRecognizers>
+            </Frame>
+            <Frame BackgroundColor="Red" Style="{StaticResource FrameStyle}">
+                <StackLayout>
+                    <Label Text="😢" Style="{StaticResource EmojiStyle}" />
+                    <Label Text="Someone is missing" Style="{StaticResource DetailStyle}" />
+                </StackLayout>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="LostFrame_Tapped" />
+                </Frame.GestureRecognizers>
+            </Frame>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

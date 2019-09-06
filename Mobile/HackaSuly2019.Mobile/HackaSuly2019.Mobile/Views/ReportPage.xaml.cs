@@ -4,7 +4,6 @@ using Plugin.Media.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,23 +13,52 @@ using Xamarin.Forms.Xaml;
 
 namespace HackaSuly2019.Mobile.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class WelcomePage : ContentPage
+    public enum ReportPageState
     {
-        public WelcomePage()
+        Found = 1,
+        Lost = 2
+    }
+
+    [QueryProperty(nameof(State), "state")]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class ReportPage : ContentPage
+    {
+        private ReportPageState _state;
+        public string State { set { _state = (ReportPageState)int.Parse(value); } }
+        public ReportPage()
         {
             InitializeComponent();
         }
 
-        private async void CameraButton_Clicked(object sender, EventArgs e)
+        private async void SelectImageButton_Clicked(object sender, EventArgs e)
         {
-            await UploadPhoto(CrossMedia.Current.IsCameraAvailable,
+            const string Cancel = "Cancel";
+            const string Camera = "Camera";
+            const string Gallery = "Gallery";
+
+            var button = await DisplayActionSheet("Where do you want to get the image?", Cancel, null, Camera, Gallery);
+            if (button == Cancel) return;
+
+            if (button == Camera)
+            {
+                await UploadPhoto(CrossMedia.Current.IsCameraAvailable,
                 () => CrossMedia.Current.TakePhotoAsync(
                     new StoreCameraMediaOptions
                     {
                         PhotoSize = PhotoSize.Medium,
                         CompressionQuality = 80
                     }));
+            }
+            else
+            {
+                await UploadPhoto(CrossMedia.Current.IsCameraAvailable,
+               () => CrossMedia.Current.PickPhotoAsync(
+                   new PickMediaOptions
+                   {
+                       PhotoSize = PhotoSize.Medium,
+                       CompressionQuality = 80,
+                   }));
+            }
         }
 
         private async Task UploadPhoto(bool isSupported, Func<Task<MediaFile>> taskFactory)
@@ -59,8 +87,8 @@ namespace HackaSuly2019.Mobile.Views
                 var watch = new Stopwatch();
                 watch.Start();
 
+                profilePicture.Source = ImageSource.FromStream(() => file.GetStream());
                 var stream = file.GetStream();
-
                 var uri = await ImageUploadHelper.UploadFileAsync(stream);
                 watch.Stop();
 
@@ -91,19 +119,9 @@ namespace HackaSuly2019.Mobile.Views
             //progressGrid.IsVisible = false;
         }
 
-        private async void GalleryButton_Clicked(object sender, EventArgs e)
+        private void ReportButton_Clicked(object sender, EventArgs e)
         {
-           
-        }
 
-        private async void FoundFrame_Tapped(object sender, EventArgs e)
-        {
-            await Shell.Current.GoToAsync("report?state=1");
-        }
-
-        private async void LostFrame_Tapped(object sender, EventArgs e)
-        {
-            await Shell.Current.GoToAsync("report?state=2");
         }
     }
 }
