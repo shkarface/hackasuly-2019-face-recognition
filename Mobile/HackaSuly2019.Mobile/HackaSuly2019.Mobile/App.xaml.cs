@@ -14,7 +14,7 @@ namespace HackaSuly2019.Mobile
             InitializeComponent();
 
             DependencyService.Register<MockDataStore>();
-            MainPage = new AppShell();
+            MainPage = new NavigationPage(new WelcomePage());
         }
 
         protected override void OnStart()

@@ -7,32 +7,32 @@
              mc:Ignorable="d"
              x:Class="HackaSuly2019.Mobile.Views.Matches">
 
-    <CollectionView x:Name="matchesCollection" >
-        <!--<CollectionView.ItemsLayout>
-            <GridItemsLayout Orientation="Vertical" Span="2" />
-        </CollectionView.ItemsLayout>-->
-        
-        <CollectionView.ItemTemplate>
-            <DataTemplate>
-                <StackLayout Padding="10" Orientation="Horizontal" Spacing="15">
-                    <Grid>
-                        <abstractions:CircleImage Source="{Binding Thumbnail}" WidthRequest="128" HeightRequest="128" Aspect="AspectFill" />
+    <Grid>
+        <CollectionView x:Name="matchesCollection" >
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="10" Orientation="Horizontal" Spacing="15">
+                        <Grid>
+                            <abstractions:CircleImage Source="{Binding Thumbnail}" WidthRequest="128" HeightRequest="128" Aspect="AspectFill" />
 
-                        <Grid BackgroundColor="#c000" Padding="5" Margin="3, 5" HorizontalOptions="Center"
+                            <Grid BackgroundColor="#c000" Padding="5" Margin="3, 5" HorizontalOptions="Center"
                                VerticalOptions="End">
-                            <Label Text="{Binding ConfidencePercentage}" TextColor="White" />
+                                <Label Text="{Binding ConfidencePercentage}" TextColor="White" />
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    <StackLayout HorizontalOptions="FillAndExpand">
-                        <Label Text="Reported by:" FontAttributes="Bold" Margin="0, 0, 0, -5" />
-                        <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="20" />
-                        <Label Text="{Binding PhoneNumber}" FontSize="16" />
-                        <Button x:Name="callButton" Text="Call" HorizontalOptions="FillAndExpand"
+                        <StackLayout HorizontalOptions="FillAndExpand">
+                            <Label Text="Reported by:" FontAttributes="Bold" Margin="0, 0, 0, -5" />
+                            <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="20" />
+                            <Label Text="{Binding PhoneNumber}" FontSize="16" />
+                            <Button x:Name="callButton" Text="Call" HorizontalOptions="FillAndExpand"
                                 Clicked="CallButton_Clicked" VerticalOptions="EndAndExpand"
                                 BackgroundColor="Green" TextColor="White" Padding="5, 0"/>
+                        </StackLayout>
                     </StackLayout>
-                </StackLayout>
-            </DataTemplate>
-        </CollectionView.ItemTemplate>
-    </CollectionView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        
+        <Label x:Name="errorMessage" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+    </Grid>
 </ContentPage>

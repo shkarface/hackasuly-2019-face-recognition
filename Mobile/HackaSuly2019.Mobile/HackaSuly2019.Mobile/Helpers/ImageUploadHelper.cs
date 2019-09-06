@@ -1,8 +1,12 @@
-﻿using Microsoft.WindowsAzure.Storage;
+﻿using HackaSuly2019.Mobile.Models;
+using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace HackaSuly2019.Mobile.Helpers
@@ -10,6 +14,7 @@ namespace HackaSuly2019.Mobile.Helpers
     public static class ImageUploadHelper
     {
         private const string ContainerName = "finder";
+        private const string ApiUrl = "http://a378cfdf.ngrok.io/api";
 
         private static string _connectionString;
         public static string ConnectionString
@@ -79,6 +84,35 @@ namespace HackaSuly2019.Mobile.Helpers
             await blob.UploadFromStreamAsync(file);
 
             return blob.Uri;
+        }
+
+        public static Task<Person> ReportMissingPerson(Person person)
+        {
+            return ReportPerson(person, "LostPerson");
+        }
+
+        public static Task<Person> ReportFoundPerson(Person person)
+        {
+            return ReportPerson(person, "FoundPerson");
+        }
+
+        private static async Task<Person> ReportPerson(Person person, string endpoint)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var json = JsonConvert.SerializeObject(person);
+                using (var response = await httpClient.PostAsync(ApiUrl + "/" + endpoint,
+                    new StringContent(json, encoding: Encoding.UTF8, mediaType: "application/json")))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        json = await response.Content.ReadAsStringAsync();
+                        return JsonConvert.DeserializeObject<Person>(json);
+                    }
+                }
+            }
+
+            return null;
         }
 
         private static async Task<CloudBlobContainer> GetContainerAsync(string name)
