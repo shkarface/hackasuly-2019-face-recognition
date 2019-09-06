@@ -1,7 +1,10 @@
-﻿using Plugin.Media;
+﻿using HackaSuly2019.Mobile.Helpers;
+using Plugin.Media;
 using Plugin.Media.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,50 +22,84 @@ namespace HackaSuly2019.Mobile.Views
             InitializeComponent();
         }
 
-        private void SetPhoto(MediaFile file)
-        {
-            if (file == null)
-            {
-                return;
-            }
-
-            selectedImage.Source = ImageSource.FromStream(() => file.GetStream());
-        }
-
         private async void CameraButton_Clicked(object sender, EventArgs e)
         {
-            await CrossMedia.Current.Initialize();
+            await UploadPhoto(CrossMedia.Current.IsCameraAvailable,
+                () => CrossMedia.Current.TakePhotoAsync(
+                    new StoreCameraMediaOptions
+                    {
+                        PhotoSize = PhotoSize.Medium,
+                        CompressionQuality = 80
+                    }));
+        }
 
-            if (CrossMedia.Current.IsCameraAvailable == false)
+        private async Task UploadPhoto(bool isSupported, Func<Task<MediaFile>> taskFactory)
+        {
+            try
             {
-                await DisplayAlert("Not supported", "Your device does not support this functionality", "Ok");
-                return;
+                await CrossMedia.Current.Initialize();
+
+                if (isSupported == false)
+                {
+                    await DisplayAlert("Not supported", "Your device does not support this functionality", "Ok");
+                    return;
+                }
+
+                var task = taskFactory();
+
+                var file = await task;
+
+                if (file == null)
+                {
+                    return;
+                }
+
+                SetBusy();
+
+                var watch = new Stopwatch();
+                watch.Start();
+
+                var stream = file.GetStream();
+
+                var uri = await ImageUploadHelper.UploadFileAsync(stream);
+                watch.Stop();
+
+                await Xamarin.Essentials.Browser.OpenAsync(uri.AbsoluteUri);
+
+                await DisplayAlert($"File uploaded! ({watch.ElapsedMilliseconds:n0} ms)", uri.ToString(), "OK");
             }
-
-            var file = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
+            catch (Exception ex)
             {
-                DefaultCamera = CameraDevice.Front
-            });
+                await DisplayAlert("Error", ex.Message, "OK");
+            }
+            finally
+            {
+                SetNotBusy();
+            }
+        }
 
-            SetPhoto(file);
+        private void SetBusy()
+        {
+            cameraButton.IsEnabled = false;
+            galleryButton.IsEnabled = false;
+            progressGrid.IsVisible = true;
+        }
+        private void SetNotBusy()
+        {
+            cameraButton.IsEnabled = true;
+            galleryButton.IsEnabled = true;
+            progressGrid.IsVisible = false;
         }
 
         private async void GalleryButton_Clicked(object sender, EventArgs e)
         {
-            await CrossMedia.Current.Initialize();
-
-            if (CrossMedia.Current.IsPickPhotoSupported == false)
-            {
-                await DisplayAlert("Not supported", "Your device does not support this functionality", "Ok");
-                return;
-            }
-
-            var file = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions
-            {
-                PhotoSize = PhotoSize.Medium,
-            });
-
-            SetPhoto(file);
+            await UploadPhoto(CrossMedia.Current.IsCameraAvailable,
+                () => CrossMedia.Current.PickPhotoAsync(
+                    new PickMediaOptions
+                    {
+                        PhotoSize = PhotoSize.Medium,
+                        CompressionQuality = 80,
+                    }));
         }
     }
 }

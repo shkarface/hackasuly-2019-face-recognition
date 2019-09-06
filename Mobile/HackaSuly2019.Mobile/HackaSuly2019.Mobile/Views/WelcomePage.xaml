@@ -13,12 +13,17 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <StackLayout>
+            <StackLayout x:Name="buttonsStackLayout">
                 <Button x:Name="cameraButton" Text="Camera" Clicked="CameraButton_Clicked" />
                 <Button x:Name="galleryButton" Text="Gallery" Clicked="GalleryButton_Clicked" />
             </StackLayout>
             
             <Image x:Name="selectedImage" Grid.Row="1"/>
+
+            <Grid Grid.RowSpan="2" x:Name="progressGrid" IsVisible="False">
+                <ActivityIndicator WidthRequest="256" HeightRequest="256" HorizontalOptions="Center"
+                                   VerticalOptions="Center" IsRunning="True" />
+            </Grid>
         </Grid>
         
     </ContentPage.Content>
