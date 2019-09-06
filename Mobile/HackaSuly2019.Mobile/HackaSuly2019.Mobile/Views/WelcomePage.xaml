@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:lottie="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
+             Title="Find Me"
+             mc:Ignorable="d"
+             x:Class="HackaSuly2019.Mobile.Views.WelcomePage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label" x:Key="EmojiStyle">
+                <Setter Property="FontSize" Value="128" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+                <Setter Property="Opacity" Value="1" />
+                <Setter Property="FontAttributes" Value="Bold" />
+            </Style>
+
+            <Style TargetType="Label" x:Key="DetailStyle">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="TextColor" Value="White" />
+            </Style>
+
+            <Style TargetType="Frame" x:Key="FrameStyle">
+                <Setter Property="VerticalOptions" Value="FillAndExpand" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout Padding="10">
+            <Frame BackgroundColor="Green" Style="{StaticResource FrameStyle}">
+                <StackLayout>
+                    <Grid VerticalOptions="FillAndExpand" 
+	                       HorizontalOptions="FillAndExpand">
+                        <lottie:AnimationView
+	                        Animation="happy.json"
+	                        Loop="True" 
+	                        AutoPlay="True" />
+                        <Grid>
+                            <!--HACK! AnimationView absorbs taps!-->
+                        </Grid>
+                    </Grid>
+                    <Label Text="Found someone" Style="{StaticResource DetailStyle}" />
+                </StackLayout>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="FoundFrame_Tapped" />
+                </Frame.GestureRecognizers>
+            </Frame>
+            <Frame BackgroundColor="Red" Style="{StaticResource FrameStyle}">
+                <StackLayout>
+                    <Grid VerticalOptions="FillAndExpand" 
+	                       HorizontalOptions="FillAndExpand">
+                        <lottie:AnimationView
+	                        Animation="sad.json"
+                            Scale="1.3"
+	                        Loop="True" 
+	                        AutoPlay="True" />
+                        <Grid>
+                            <!--HACK! AnimationView absorbs taps!-->
+                        </Grid>
+                    </Grid>
+                    <Label Text="Someone is missing" Style="{StaticResource DetailStyle}" />
+                </StackLayout>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="LostFrame_Tapped" />
+                </Frame.GestureRecognizers>
+            </Frame>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
