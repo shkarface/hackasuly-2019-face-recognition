@@ -93,17 +93,17 @@ namespace HackaSuly2019.Mobile.Views
 
         private async void GalleryButton_Clicked(object sender, EventArgs e)
         {
-           
+
         }
 
         private async void FoundFrame_Tapped(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("report?state=1");
+            await (App.Current.MainPage as NavigationPage).PushAsync(new ReportPage(ReportPageState.Found));
         }
 
         private async void LostFrame_Tapped(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("report?state=2");
+            await (App.Current.MainPage as NavigationPage).PushAsync(new ReportPage(ReportPageState.Lost));
         }
     }
 }

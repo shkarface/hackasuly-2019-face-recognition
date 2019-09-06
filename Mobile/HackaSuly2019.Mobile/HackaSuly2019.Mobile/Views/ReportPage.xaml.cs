@@ -1,4 +1,5 @@
 ﻿using HackaSuly2019.Mobile.Helpers;
+using HackaSuly2019.Mobile.ViewModels;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using System;
@@ -20,30 +21,16 @@ namespace HackaSuly2019.Mobile.Views
         Lost = 2
     }
 
-    [QueryProperty(nameof(State), "state")]
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ReportPage : ContentPage
     {
         private Stream _image;
 
         private ReportPageState _state;
-        public string State
+
+        public ReportPage(ReportPageState state)
         {
-            set
-            {
-                _state = (ReportPageState)int.Parse(value);
-                if (_state == ReportPageState.Found)
-                {
-                    Title = "I've found someone";
-                }
-                else
-                {
-                    Title = "Report a missing person";
-                }
-            }
-        }
-        public ReportPage()
-        {
+            _state = state;
             InitializeComponent();
         }
 
@@ -160,8 +147,45 @@ namespace HackaSuly2019.Mobile.Views
 
                 var uri = await ImageUploadHelper.UploadFileAsync(_image);
 
-                //await Xamarin.Essentials.Browser.OpenAsync(uri.AbsoluteUri);
-                await Shell.Current.GoToAsync("matches");
+                var input = new Models.Person
+                {
+                    ContactPhone = phoneEntry.Text,
+                    Gender = maleRadioButton.IsChecked ? MissingPeople.Models.Gender.Male : MissingPeople.Models.Gender.Female,
+                    ImageURL = uri.AbsoluteUri,
+                    Name = nameEntry.Text,
+                };
+
+                var task = _state == ReportPageState.Found ?
+                    ImageUploadHelper.ReportFoundPerson(input) :
+                    ImageUploadHelper.ReportMissingPerson(input);
+
+                var person = await task;
+
+                if (person is null)
+                {
+                    await DisplayAlert("Could not scan image!", "Could not scan image, please try again later.", "Okay");
+                    return;
+                }
+
+                var matches = person.SimilarPeople?.Select(p => new MatchViewModel
+                {
+                    Confidence = p.Similarity * 100,
+                    PhoneNumber = p.ContactPhone,
+                    Thumbnail = ImageSource.FromUri(new Uri(p.ImageURL)),
+                });
+
+                string error = null;
+
+                if (matches is null || !matches.Any())
+                {
+                    error = _state == ReportPageState.Found ?
+                        "This person has not been registered as a missing person." :
+                        "This person has not been found by anyone yet. Please check again at a later time.";
+                }
+
+                var page = error is null ? new Matches(matches) : new Matches(error);
+
+                await (App.Current.MainPage as NavigationPage).PushAsync(new Matches(matches));
             }
             catch (Exception ex)
             {

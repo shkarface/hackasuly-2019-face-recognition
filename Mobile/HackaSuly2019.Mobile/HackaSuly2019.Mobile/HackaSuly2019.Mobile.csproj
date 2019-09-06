@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="Com.Airbnb.Xamarin.Forms.Lottie" Version="3.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
     <PackageReference Include="Xam.Plugin.Media" Version="4.0.1.5" />
     <PackageReference Include="Xam.Plugins.Forms.ImageCircle" Version="3.0.0.5" />
@@ -26,6 +27,10 @@
 
   <ItemGroup>
     <EmbeddedResource Include="config.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\MissingPeople.Models\MissingPeople.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>
