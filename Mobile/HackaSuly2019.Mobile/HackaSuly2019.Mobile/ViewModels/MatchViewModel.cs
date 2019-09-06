@@ -11,6 +11,7 @@ namespace HackaSuly2019.Mobile.ViewModels
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public double Confidence { get; set; }
+        public DateTime CreatedAt { get; set; }
         public string ConfidencePercentage => $"{Confidence:n1}%";
     }
 }
