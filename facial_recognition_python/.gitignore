@@ -1,0 +1,8 @@
+# Skips Image Folder
+/images
+
+# test file
+test.py
+
+# Vscode folder
+.vscode
