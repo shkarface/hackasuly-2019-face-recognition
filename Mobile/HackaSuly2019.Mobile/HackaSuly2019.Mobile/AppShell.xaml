@@ -5,9 +5,8 @@
        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
        mc:Ignorable="d"
        xmlns:local="clr-namespace:HackaSuly2019.Mobile.Views"
-       Title="HackaSuly2019.Mobile"
        x:Class="HackaSuly2019.Mobile.AppShell"
-       Visual="Material">
+       Visual="Material" Title="Find Me">
     <!-- 
         Styles and Resources 
     -->

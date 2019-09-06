@@ -24,7 +24,21 @@ namespace HackaSuly2019.Mobile.Views
     public partial class ReportPage : ContentPage
     {
         private ReportPageState _state;
-        public string State { set { _state = (ReportPageState)int.Parse(value); } }
+        public string State
+        {
+            set
+            {
+                _state = (ReportPageState)int.Parse(value);
+                if (_state == ReportPageState.Found)
+                {
+                    Title = "I've found someone";
+                }
+                else
+                {
+                    Title = "Report a missing person";
+                }
+            }
+        }
         public ReportPage()
         {
             InitializeComponent();
