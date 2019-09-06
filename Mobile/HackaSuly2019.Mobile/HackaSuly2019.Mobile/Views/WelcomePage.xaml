@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:forms="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
+             xmlns:lottie="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
              Title="Find Me"
              mc:Ignorable="d"
              x:Class="HackaSuly2019.Mobile.Views.WelcomePage">
@@ -36,7 +36,7 @@
                 <StackLayout>
                     <Grid VerticalOptions="FillAndExpand" 
 	                       HorizontalOptions="FillAndExpand">
-                        <forms:AnimationView
+                        <lottie:AnimationView
 	                        Animation="happy.json"
 	                        Loop="True" 
 	                        AutoPlay="True" />
@@ -54,7 +54,7 @@
                 <StackLayout>
                     <Grid VerticalOptions="FillAndExpand" 
 	                       HorizontalOptions="FillAndExpand">
-                        <forms:AnimationView
+                        <lottie:AnimationView
 	                        Animation="sad.json"
                             Scale="1.3"
 	                        Loop="True" 
