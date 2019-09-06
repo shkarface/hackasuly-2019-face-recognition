@@ -1,5 +1,4 @@
 import face_recognition
-from flask import jsonify
 
 dic = {
     "male": {
@@ -19,11 +18,11 @@ def detect_faces_in_image(file_stream, uniqueString, gender):
         saved_unique_identification = dic[gender]["saved_unique_identification"]
         saved_face_encodings = dic[gender]["saved_face_encodings"]
         return detect_faces(file_stream, uniqueString,saved_unique_identification, saved_face_encodings)
-    else: return jsonify({
+    else: return {
         "result": None,
         "saved": None,
         "error": "Gender is not valid",
-    })
+    }
         
 
 def detect_faces(file_stream, uniqueString, saved_unique_identification, saved_face_encodings): 
@@ -81,4 +80,4 @@ def detect_faces(file_stream, uniqueString, saved_unique_identification, saved_f
         "saved": saved,
         "error": error,
     }
-    return jsonify(result)
+    return result

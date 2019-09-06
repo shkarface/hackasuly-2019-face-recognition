@@ -33,7 +33,7 @@ def upload_image():
 
         if file and allowed_file(file.filename) and unique_string is not None and gender is not None:
             # The image file seems valid! Detect faces and return the result.
-            return detect_faces_in_image(file, unique_string, gender)
+            return jsonify(detect_faces_in_image(file, unique_string, gender))
 
     # If no valid image file was uploaded, show the file upload form:
     
