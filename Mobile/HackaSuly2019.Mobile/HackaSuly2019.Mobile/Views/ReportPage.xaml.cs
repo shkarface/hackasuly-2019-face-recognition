@@ -160,7 +160,8 @@ namespace HackaSuly2019.Mobile.Views
 
                 var uri = await ImageUploadHelper.UploadFileAsync(_image);
 
-                await Xamarin.Essentials.Browser.OpenAsync(uri.AbsoluteUri);
+                //await Xamarin.Essentials.Browser.OpenAsync(uri.AbsoluteUri);
+                await Shell.Current.GoToAsync("matches");
             }
             catch (Exception ex)
             {

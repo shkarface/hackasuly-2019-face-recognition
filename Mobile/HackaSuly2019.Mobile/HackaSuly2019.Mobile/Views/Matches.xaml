@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:abstractions="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+             mc:Ignorable="d"
+             x:Class="HackaSuly2019.Mobile.Views.Matches">
+
+    <CollectionView x:Name="matchesCollection" >
+        <!--<CollectionView.ItemsLayout>
+            <GridItemsLayout Orientation="Vertical" Span="2" />
+        </CollectionView.ItemsLayout>-->
+        
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <StackLayout Padding="10" Orientation="Horizontal" Spacing="15">
+                    <Grid>
+                        <abstractions:CircleImage Source="{Binding Thumbnail}" WidthRequest="128" HeightRequest="128" Aspect="AspectFill" />
+
+                        <Grid BackgroundColor="#c000" Padding="5" Margin="3, 5" HorizontalOptions="Center"
+                               VerticalOptions="End">
+                            <Label Text="{Binding ConfidencePercentage}" TextColor="White" />
+                        </Grid>
+                    </Grid>
+                    <StackLayout HorizontalOptions="FillAndExpand">
+                        <Label Text="Reported by:" FontAttributes="Bold" Margin="0, 0, 0, -5" />
+                        <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="20" />
+                        <Label Text="{Binding PhoneNumber}" FontSize="16" />
+                        <Button x:Name="callButton" Text="Call" HorizontalOptions="FillAndExpand"
+                                Clicked="CallButton_Clicked" VerticalOptions="EndAndExpand"
+                                BackgroundColor="Green" TextColor="White" Padding="5, 0"/>
+                    </StackLayout>
+                </StackLayout>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
+</ContentPage>

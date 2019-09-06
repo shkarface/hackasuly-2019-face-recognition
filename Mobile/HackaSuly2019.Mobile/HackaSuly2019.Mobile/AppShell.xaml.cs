@@ -13,6 +13,7 @@ namespace HackaSuly2019.Mobile
             InitializeComponent();
 
             Routing.RegisterRoute("report", typeof(ReportPage));
+            Routing.RegisterRoute("matches", typeof(Matches));
             SetTabBarIsVisible(this, false);
         }
     }
