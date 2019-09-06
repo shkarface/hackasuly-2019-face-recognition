@@ -12,6 +12,7 @@ namespace HackaSuly2019.Mobile.Models
         public string ImageURL { get; set; }
         public string ContactPhone { get; set; }
         public Gender Gender { get; set; }
-        public SimilarPerson[] SimilarPeople { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public List<SimilarPerson> SimilarPeople { get; set; }
     }
 }

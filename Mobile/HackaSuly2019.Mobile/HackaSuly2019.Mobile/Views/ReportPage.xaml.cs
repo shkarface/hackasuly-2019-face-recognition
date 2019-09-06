@@ -31,6 +31,12 @@ namespace HackaSuly2019.Mobile.Views
         public ReportPage(ReportPageState state)
         {
             _state = state;
+
+            if (_state == ReportPageState.Found)
+                Title = "Found";
+            else
+                Title = "Lost";
+
             InitializeComponent();
         }
 
@@ -170,6 +176,8 @@ namespace HackaSuly2019.Mobile.Views
                 var matches = person.SimilarPeople?.Select(p => new MatchViewModel
                 {
                     Confidence = p.Similarity * 100,
+                    CreatedAt = p.CreatedAt,
+                    Name = p.Name,
                     PhoneNumber = p.ContactPhone,
                     Thumbnail = ImageSource.FromUri(new Uri(p.ImageURL)),
                 });
@@ -185,7 +193,7 @@ namespace HackaSuly2019.Mobile.Views
 
                 var page = error is null ? new Matches(matches) : new Matches(error);
 
-                await (App.Current.MainPage as NavigationPage).PushAsync(new Matches(matches));
+                await (App.Current.MainPage as NavigationPage).PushAsync(page);
             }
             catch (Exception ex)
             {

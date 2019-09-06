@@ -25,6 +25,7 @@ namespace HackaSuly2019.Mobile.Views
             InitializeComponent();
             matchesCollection.IsVisible = false;
             errorMessage.Text = error;
+            errorMessage.IsVisible = true;
         }
 
         private async void CallButton_Clicked(object sender, EventArgs e)

@@ -113,7 +113,7 @@ namespace HackaSuly2019.Mobile.Helpers
             }
 
             return null;
-        }
+         }
 
         private static async Task<CloudBlobContainer> GetContainerAsync(string name)
         {
