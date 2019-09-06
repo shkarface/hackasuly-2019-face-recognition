@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using MissingPeople.Services;
 using MissingPeople.Models;
 using System.Net.Http;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MissingPeople.Controllers
 {
@@ -12,43 +14,76 @@ namespace MissingPeople.Controllers
     [ApiController]
     public class LostPersonController : ControllerBase
     {
-        private LostPersonService _LostPersonService;
+        private PersonService _PersonService;
         private string _URL;
 
-        public LostPersonController(LostPersonService lostPersonService, IDatabaseSettings databaseSettings)
+        public LostPersonController(PersonService personService, IDatabaseSettings databaseSettings)
         {
-            _LostPersonService = lostPersonService;
+            _PersonService = personService;
             _URL = databaseSettings.FlaskAPI;
             //_FaceRecognitionService = faceRecognitionService;
         }
 
         // GET: api/LostPerson/5
         [HttpGet("{id}")]
-        public ActionResult Get(string id) => Ok(_LostPersonService.Get(id));
+        public ActionResult Get(string id) => Ok(_PersonService.Get(id, PersonType.Lost));
 
         // POST: api/LostPerson
         [HttpPost]
-        public ActionResult Post(Person person)
+        public async Task<ActionResult> PostAsync(Person person)
         {
-            _LostPersonService.Create(person);
-            Task.Run(async () =>
+            _PersonService.Create(person, PersonType.Lost);
+
+            string id = person.ID;
+            using (var httpClient = new HttpClient())
             {
-                string id = person.ID;
-                using (var httpClient = new HttpClient())
-                {
-                    HttpContent content = new FormUrlEncodedContent(new Dictionary<string, string>()
+                HttpContent content = new FormUrlEncodedContent(new Dictionary<string, string>()
                     {
-                        {"force","1" },
+                        {"force","0" },
                         {"id", id },
                         {"gender", ((int)person.Gender).ToString() },
                         {"image", person.ImageURL }
                     });
 
-                    var response = await httpClient.PostAsync(_URL, content);
-                    var responseString = await response.Content.ReadAsStringAsync();
-                }
+                var response = await httpClient.PostAsync(_URL, content);
+                var responseString = await response.Content.ReadAsStringAsync();
+                var obj = JsonConvert.DeserializeObject<JObject>(responseString);
+                if (obj["result"] is JArray result)
+                {
+                    foreach (var res in result)
+                    {
+                        string _id = res[0].ToString();
+                        float percentage = float.Parse(res[1].ToString());
 
-            });
+                        var otherPerson = _PersonService.Get(_id, PersonType.Found);
+                        if (otherPerson == null)
+                            continue;
+
+                        var lostSimilar = new SimilarPerson()
+                        {
+                            Name = person.Name,
+                            Similarity = percentage,
+                            ContactPhone = person.ContactPhone,
+                            ImageURL = person.ImageURL,
+                            CreatedAt = person.CreatedAt
+                        };
+                        var foundSimilar = new SimilarPerson()
+                        {
+                            Name = otherPerson.Name,
+                            Similarity = percentage,
+                            ContactPhone = otherPerson.ContactPhone,
+                            ImageURL = otherPerson.ImageURL,
+                            CreatedAt = otherPerson.CreatedAt
+                        };
+
+                        _PersonService.AddNewSimilarPerson(person.ID, foundSimilar, PersonType.Lost);
+                        _PersonService.AddNewSimilarPerson(otherPerson.ID, lostSimilar, PersonType.Found);
+
+                        person.SimilarPeople.Add(lostSimilar);
+                    }
+                }
+            }
+
             return Ok(person);
         }
     }

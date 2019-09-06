@@ -16,59 +16,77 @@ namespace MissingPeople.Backend.Controllers
     [ApiController]
     public class FoundPersonController : ControllerBase
     {
-        private LostPersonService _LostPersonService;
-        private FoundPersonService _FoundPersonService;
+        private PersonService _PersonService;
         private string _URL;
 
-        public FoundPersonController(FoundPersonService foundPersonService, LostPersonService lostPersonService, IDatabaseSettings databaseSettings)
+        public FoundPersonController(PersonService personService, IDatabaseSettings databaseSettings)
         {
-            _LostPersonService = lostPersonService;
-            _FoundPersonService = foundPersonService;
+            _PersonService = personService;
             _URL = databaseSettings.FlaskAPI;
             //_FaceRecognitionService = faceRecognitionService;
         }
 
+        [HttpGet]
+        public ActionResult Get() => Ok("nice");
+
         // GET: api/LostPerson/5
         [HttpGet("{id}")]
-        public ActionResult Get(string id) => Ok(_FoundPersonService.Get(id));
+        public ActionResult Get(string id) => Ok(_PersonService.Get(id, PersonType.Found));
 
         // POST: api/LostPerson
         [HttpPost]
-        public ActionResult Post(Person person)
+        public async Task<ActionResult> Post(Person person)
         {
-            _FoundPersonService.Create(person);
-            Task.Run(async () =>
+            _PersonService.Create(person, PersonType.Found);
+
+            using (var httpClient = new HttpClient())
             {
-                string id = person.ID;
-                using (var httpClient = new HttpClient())
-                {
-                    HttpContent content = new FormUrlEncodedContent(new Dictionary<string, string>()
+                HttpContent content = new FormUrlEncodedContent(new Dictionary<string, string>()
                     {
                         {"force","0" },
-                        {"id", id },
+                        {"id", person.ID },
                         {"gender", ((int)person.Gender).ToString() },
                         {"image", person.ImageURL }
                     });
-                    var response = await httpClient.PostAsync(_URL, content);
-                    var responseString = await response.Content.ReadAsStringAsync();
-                    var obj = JsonConvert.DeserializeObject<JObject>(responseString);
-                    if (obj["result"] is JArray result)
+                var response = await httpClient.PostAsync(_URL, content);
+                var responseString = await response.Content.ReadAsStringAsync();
+                var obj = JsonConvert.DeserializeObject<JObject>(responseString);
+                if (obj["result"] is JArray result)
+                {
+                    foreach (var res in result)
                     {
-                        foreach (var res in result)
+                        string _id = res[0].ToString();
+                        float percentage = float.Parse(res[1].ToString());
+
+                        var otherPerson = _PersonService.Get(_id, PersonType.Lost);
+                        if (otherPerson == null)
+                            continue;
+
+                        var lostSimilar = new SimilarPerson()
                         {
-                            string _id = res[0].ToString();
-                            float percentage = float.Parse(res[1].ToString());
-                            var p = _LostPersonService.AddNewSimilarPerson(_id, new SimilarPerson()
-                            {
-                                Similarity = percentage,
-                                ContactPhone = person.ContactPhone,
-                                ImageURL = person.ImageURL
-                            });
-                            Console.WriteLine(p);
-                        }
+                            Name = otherPerson.Name,
+                            Similarity = percentage,
+                            ContactPhone = otherPerson.ContactPhone,
+                            ImageURL = otherPerson.ImageURL,
+                            CreatedAt = otherPerson.CreatedAt
+                        };
+                        var foundSimilar = new SimilarPerson()
+                        {
+                            Name = person.Name,
+                            Similarity = percentage,
+                            ContactPhone = person.ContactPhone,
+                            ImageURL = person.ImageURL,
+                            CreatedAt = person.CreatedAt
+                        };
+
+                        _PersonService.AddNewSimilarPerson(_id, foundSimilar, PersonType.Lost);
+                        _PersonService.AddNewSimilarPerson(otherPerson.ID, lostSimilar, PersonType.Found);
+
+                        person.SimilarPeople.Add(lostSimilar);
                     }
                 }
-            });
+            }
+
             return Ok(person);
         }
     }

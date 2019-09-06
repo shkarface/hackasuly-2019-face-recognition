@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MissingPeople.Models
@@ -26,7 +27,10 @@ namespace MissingPeople.Models
         [BsonElement("gender")]
         public Gender Gender { get; set; }
 
+        [BsonElement("createdAt")]
+        public DateTime CreatedAt { get; set; }
+
         [BsonElement("similarPeople")]
-        public SimilarPerson[] SimilarPeople { get; set; } = new SimilarPerson[0];
+        public List<SimilarPerson> SimilarPeople { get; set; } = new List<SimilarPerson>();
     }
 }

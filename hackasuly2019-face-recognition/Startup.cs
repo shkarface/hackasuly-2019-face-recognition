@@ -29,8 +29,7 @@ namespace MissingPeople
             services
                 .Configure<DatabaseSettings>(Configuration.GetSection(nameof(DatabaseSettings)))
                     .AddSingleton<IDatabaseSettings>(sp => sp.GetRequiredService<IOptions<DatabaseSettings>>().Value)
-                    .AddSingleton<Services.FoundPersonService>()
-                    .AddSingleton<Services.LostPersonService>()
+                    .AddSingleton<Services.PersonService>()
                     .AddSingleton<Services.FaceRecognitionService>()
 
                 .AddCors(options =>
@@ -57,7 +56,7 @@ namespace MissingPeople
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseMvc();
         }
     }
