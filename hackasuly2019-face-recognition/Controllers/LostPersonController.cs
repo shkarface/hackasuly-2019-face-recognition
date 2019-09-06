@@ -79,11 +79,10 @@ namespace MissingPeople.Controllers
                         _PersonService.AddNewSimilarPerson(person.ID, foundSimilar, PersonType.Lost);
                         _PersonService.AddNewSimilarPerson(otherPerson.ID, lostSimilar, PersonType.Found);
 
-                        person.SimilarPeople.Add(lostSimilar);
+                        person.SimilarPeople.Add(foundSimilar);
                     }
                 }
             }
-
             return Ok(person);
         }
     }
