@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace hackasuly2019_face_recognition
+namespace MissingPeople
 {
     public class Program
     {

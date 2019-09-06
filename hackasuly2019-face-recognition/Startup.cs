@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace hackasuly2019_face_recognition
+namespace MissingPeople
 {
     public class Startup
     {
@@ -31,6 +31,7 @@ namespace hackasuly2019_face_recognition
                     .AddSingleton<IDatabaseSettings>(sp => sp.GetRequiredService<IOptions<DatabaseSettings>>().Value)
                     .AddSingleton<Services.FoundPersonService>()
                     .AddSingleton<Services.LostPersonService>()
+                    .AddSingleton<Services.FaceRecognitionService>()
 
                 .AddCors(options =>
                 {

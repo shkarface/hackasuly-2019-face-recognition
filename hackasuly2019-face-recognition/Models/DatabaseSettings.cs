@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace hackasuly2019_face_recognition
+namespace MissingPeople
 {
 
     public class DatabaseSettings : IDatabaseSettings
@@ -12,6 +12,7 @@ namespace hackasuly2019_face_recognition
         public string FoundCollectionName { get; set; }
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
+        public string FlaskAPI { get; set; }
     }
 
     public interface IDatabaseSettings
@@ -20,5 +21,6 @@ namespace hackasuly2019_face_recognition
         string FoundCollectionName { get; set; }
         string ConnectionString { get; set; }
         string DatabaseName { get; set; }
+        string FlaskAPI { get; set; }
     }
 }
