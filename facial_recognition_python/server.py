@@ -49,13 +49,19 @@ def upload_image():
         file = request.files['file']
         unique_string = request.form['string']
         gender = request.form['gender']
+        force_save = request.form['force']
 
+        if force_save == 0 or force_save[0] == '0':
+            force_save = False
+        elif force_save == 1 or force_save[0] == '1':
+            force_save = True
+        
         if file.filename == '':
             return redirect(request.url)
 
         if file and allowed_file(file.filename) and unique_string is not None and gender is not None:
             # The image file seems valid! Detect faces and return the result.
-            return jsonify(detect_faces_in_image(file, unique_string, gender))
+            return jsonify(detect_faces_in_image(file, unique_string, gender, force_save))
 
     # If no valid image file was uploaded, show the file upload form:
     
@@ -66,7 +72,12 @@ def upload_image():
     <form method="POST" enctype="multipart/form-data">
       <label>File</label><input type="file" name="file"></br>
       <label>String</label><input type="text" name="string"></br>
-      <label>Gender</label><input type="text" name="gender"></br>
+      <p>Please select your gender:</p> </br>
+        <input type="radio" name="gender" value="male"> Male<br>
+        <input type="radio" name="gender" value="female"> Female<br>
+        <p>Force Save?:</p> </br>
+         <input type="radio" name="force" value=1> Yes <br>
+        <input type="radio" name="force" value=0> No <br>      
       <input type="submit" value="Upload"></br>
     </form>
     '''

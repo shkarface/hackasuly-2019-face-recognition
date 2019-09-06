@@ -26,7 +26,7 @@ An flash server that makes using facial recognition easy with facial_recognition
 * How to use server
 * Submit a `POST` request to http://host:port/ with the following form items
 ```
-file, string, gender
+file, string, gender, force
 ```
 
 ## Acknowledgments

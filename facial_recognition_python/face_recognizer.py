@@ -25,11 +25,11 @@ def restore_face_encodings():
     face_encodings_dictonary = loaded_data
 
 # call detects faces method with respective data of female set or males set
-def detect_faces_in_image(file_stream, uniqueString, gender):
+def detect_faces_in_image(file_stream, uniqueString, gender, force_save):
     if gender in face_encodings_dictonary:
         saved_unique_identification = face_encodings_dictonary[gender]["saved_unique_identification"]
         saved_face_encodings = face_encodings_dictonary[gender]["saved_face_encodings"]
-        return detect_faces(file_stream, uniqueString,saved_unique_identification, saved_face_encodings)
+        return detect_faces(file_stream, uniqueString,saved_unique_identification, saved_face_encodings, force_save)
     else: return {
         "result": None,
         "saved": None,
@@ -37,7 +37,7 @@ def detect_faces_in_image(file_stream, uniqueString, gender):
     }
         
 
-def detect_faces(file_stream, uniqueString, saved_unique_identification, saved_face_encodings): 
+def detect_faces(file_stream, uniqueString, saved_unique_identification, saved_face_encodings, force_save): 
 
     # Load the uploaded image file
     img = face_recognition.load_image_file(file_stream)
@@ -52,6 +52,17 @@ def detect_faces(file_stream, uniqueString, saved_unique_identification, saved_f
     # if the received image contain any faces then
     if len(unknown_face_encodings) > 0:
         first_unknown_face = unknown_face_encodings[0]
+
+        if (force_save):
+            if uniqueString not in saved_unique_identification:
+                saved_face_encodings.append(first_unknown_face)
+                saved_unique_identification.append(uniqueString)
+                saved = True
+            return {
+            "result": None,
+            "saved": saved,
+            "error": None,}
+
         # See if the first face in the uploaded image matches the known faces
         match_results = face_recognition.compare_faces(saved_face_encodings, first_unknown_face)
 
