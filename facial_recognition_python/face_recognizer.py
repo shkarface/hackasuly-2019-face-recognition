@@ -20,7 +20,9 @@ def backup_face_encodings():
     backup_restore.backup(folder_path, file_name, face_encodings_dictonary)
 
 def restore_face_encodings():
-    backup_restore.restore(folder_path, file_name, face_encodings_dictonary)
+    loaded_data = backup_restore.restore(folder_path, file_name)
+    global face_encodings_dictonary
+    face_encodings_dictonary = loaded_data
 
 # call detects faces method with respective data of female set or males set
 def detect_faces_in_image(file_stream, uniqueString, gender):
