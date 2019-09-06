@@ -58,13 +58,22 @@ def detect_faces(file_stream, uniqueString, saved_unique_identification, saved_f
                 saved_face_encodings.append(first_unknown_face)
                 saved_unique_identification.append(uniqueString)
                 saved = True
+                print(f'an Image of {uniqueString} added')
             return {
             "result": None,
             "saved": saved,
             "error": None,}
 
+
         # See if the first face in the uploaded image matches the known faces
         match_results = face_recognition.compare_faces(saved_face_encodings, first_unknown_face)
+
+        ### Alpha
+        if(not force_save):
+            saved_face_encodings.append(first_unknown_face)
+            saved_unique_identification.append(uniqueString)
+            print(f'an Image of {uniqueString} added')
+        ### Alpha
 
         # Searching in the faces dic to see if the face match any of them
         for index,val in enumerate(match_results):
@@ -79,7 +88,7 @@ def detect_faces(file_stream, uniqueString, saved_unique_identification, saved_f
                 sub_result = []
                 sub_result.append(saved_unique_identification[i])
                 distance = face_recognition.face_distance([saved_face_encodings[i]], first_unknown_face)
-                sub_result.append(distance[0])
+                sub_result.append(1 - distance[0])
                 result.append(sub_result)
 
         # else if was empty then we add it to the known
@@ -89,6 +98,7 @@ def detect_faces(file_stream, uniqueString, saved_unique_identification, saved_f
                 saved_face_encodings.append(first_unknown_face)
                 saved_unique_identification.append(uniqueString)
                 saved = True
+                print(f'an Image of {uniqueString} added')
             else:
                 error = "You already submitted this request"
 
