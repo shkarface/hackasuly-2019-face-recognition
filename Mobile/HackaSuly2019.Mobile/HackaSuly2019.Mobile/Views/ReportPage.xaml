@@ -20,18 +20,22 @@
     <ContentPage.Content>
         <Grid>
             <StackLayout Padding="5">
-                <circular:CircleImage x:Name="profilePicture" Source="user.png" WidthRequest="125" HeightRequest="125" />
+                <Image x:Name="profilePicture" Source="user.png" HeightRequest="125" WidthRequest="125" />
                 <Button x:Name="selectImageButton" Text="Select Image" Clicked="SelectImageButton_Clicked" />
-
-                <Entry x:Name="nameEntry" Placeholder="Your name" Visual="Material" />
-
-                <Entry x:Name="phoneEntry" Keyboard="Telephone" Placeholder="Your phone number" Visual="Material" />
 
                 <Label Text="The missing person's sex: " Style="{StaticResource LabelStyle}" />
                 <input:RadioButtonGroupView Orientation="Horizontal" >
                     <input:RadioButton Text="Male" x:Name="maleRadioButton" HorizontalOptions="CenterAndExpand" />
                     <input:RadioButton Text="Female" x:Name="femaleRadioButton" HorizontalOptions="CenterAndExpand" />
                 </input:RadioButtonGroupView>
+
+                <BoxView HeightRequest="1" Margin="5" BackgroundColor="Black" HorizontalOptions="Fill" />
+
+                <Label Text="Your Information:" FontSize="16" FontAttributes="Bold" Style="{StaticResource LabelStyle}" />
+
+                <Entry x:Name="nameEntry" Placeholder="Your name" Visual="Material" />
+
+                <Entry x:Name="phoneEntry" Keyboard="Telephone" Placeholder="Your phone number" Visual="Material" />
 
                 <Button x:Name="reportButton" Text="Report" VerticalOptions="EndAndExpand" Margin="10, 0, 10, 10" Clicked="ReportButton_Clicked" />
             </StackLayout>

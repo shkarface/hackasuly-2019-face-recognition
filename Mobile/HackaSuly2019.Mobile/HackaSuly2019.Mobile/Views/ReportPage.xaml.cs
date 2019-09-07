@@ -24,7 +24,7 @@ namespace HackaSuly2019.Mobile.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ReportPage : ContentPage
     {
-        private Stream _image;
+        private MediaFile _image;
 
         private ReportPageState _state;
 
@@ -33,9 +33,9 @@ namespace HackaSuly2019.Mobile.Views
             _state = state;
 
             if (_state == ReportPageState.Found)
-                Title = "Found";
+                Title = "I have found a missing person";
             else
-                Title = "Lost";
+                Title = "Report missing person";
 
             InitializeComponent();
         }
@@ -98,7 +98,7 @@ namespace HackaSuly2019.Mobile.Views
                 watch.Start();
 
                 profilePicture.Source = ImageSource.FromStream(() => file.GetStream());
-                _image = file.GetStream();
+                _image = file;
             }
             catch (Exception ex)
             {
@@ -151,7 +151,8 @@ namespace HackaSuly2019.Mobile.Views
             {
                 SetBusy();
 
-                var uri = await ImageUploadHelper.UploadFileAsync(_image);
+                var stream = _image.GetStream();
+                var uri = await ImageUploadHelper.UploadFileAsync(stream);
 
                 var input = new Models.Person
                 {

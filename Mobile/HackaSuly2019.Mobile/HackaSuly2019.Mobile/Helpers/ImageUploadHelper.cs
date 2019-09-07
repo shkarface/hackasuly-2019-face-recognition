@@ -14,7 +14,7 @@ namespace HackaSuly2019.Mobile.Helpers
     public static class ImageUploadHelper
     {
         private const string ContainerName = "finder";
-        private const string ApiUrl = "http://a378cfdf.ngrok.io/api";
+        private const string ApiUrl = "https://finder.serveo.net/api";
 
         private static string _connectionString;
         public static string ConnectionString
@@ -101,7 +101,8 @@ namespace HackaSuly2019.Mobile.Helpers
             using (var httpClient = new HttpClient())
             {
                 var json = JsonConvert.SerializeObject(person);
-                using (var response = await httpClient.PostAsync(ApiUrl + "/" + endpoint,
+                var url = ApiUrl + "/" + endpoint;
+                using (var response = await httpClient.PostAsync(url,
                     new StringContent(json, encoding: Encoding.UTF8, mediaType: "application/json")))
                 {
                     if (response.IsSuccessStatusCode)

@@ -4,7 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:abstractions="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
-             mc:Ignorable="d"
+             mc:Ignorable="d" Title="Simililar matches"
              x:Class="HackaSuly2019.Mobile.Views.Matches">
 
     <Grid>
@@ -34,6 +34,6 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
         
-        <Label x:Name="errorMessage" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+        <Label x:Name="errorMessage" FontSize="16" Margin="10, 0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
     </Grid>
 </ContentPage>
