@@ -14,7 +14,7 @@ namespace HackaSuly2019.Mobile.Helpers
     public static class ImageUploadHelper
     {
         private const string ContainerName = "finder";
-        private const string ApiUrl = "https://finder.serveo.net/api";
+        private const string ApiUrl = "https://9d74b5a4.ngrok.io/api";
 
         private static string _connectionString;
         public static string ConnectionString
