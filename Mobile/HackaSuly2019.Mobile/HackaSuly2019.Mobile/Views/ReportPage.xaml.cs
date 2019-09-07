@@ -195,6 +195,7 @@ namespace HackaSuly2019.Mobile.Views
                 var page = error is null ? new Matches(matches) : new Matches(error);
 
                 await (App.Current.MainPage as NavigationPage).PushAsync(page);
+                (App.Current.MainPage as NavigationPage).Navigation.RemovePage(this);
             }
             catch (Exception ex)
             {
